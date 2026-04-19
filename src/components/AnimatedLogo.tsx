@@ -122,24 +122,6 @@ export default function AnimatedLogo({ variant }: AnimatedLogoProps) {
       >
         <div className="relative">
           <LogoSVG width={width} height={height} />
-          {/* Light sweep overlay (hero only) */}
-          {variant === "hero" && (
-            <motion.div
-              className="absolute inset-0 pointer-events-none"
-              style={{
-                background:
-                  "linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.08) 45%, rgba(255,255,255,0.15) 50%, rgba(255,255,255,0.08) 55%, transparent 60%)",
-                backgroundSize: "200% 100%",
-              }}
-              animate={{ backgroundPosition: ["-100% 0%", "200% 0%"] }}
-              transition={{
-                duration: 3,
-                repeat: Infinity,
-                ease: "easeInOut",
-                repeatDelay: 1,
-              }}
-            />
-          )}
         </div>
       </motion.div>
     </motion.div>
