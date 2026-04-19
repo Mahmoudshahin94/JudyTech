@@ -32,7 +32,7 @@ export default function HeroSection() {
   return (
     <section
       id="hero"
-      className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-6"
+      className="relative flex min-h-screen flex-col items-center justify-center overflow-x-hidden overflow-y-visible px-4 sm:px-6"
     >
       <ParticleBackground />
 
@@ -42,21 +42,22 @@ export default function HeroSection() {
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-secondary/5 blur-[150px] pointer-events-none" />
 
       <motion.div
-        className="relative z-10 flex flex-col items-center text-center"
+        className="relative z-10 flex w-full min-w-0 max-w-full flex-col items-center text-center"
         variants={containerVariants}
         initial="hidden"
         animate="visible"
-        
       >
         <motion.div variants={itemVariants} className="mb-8">
           <AnimatedLogo variant="hero" />
         </motion.div>
 
+        {/* dir=ltr: hero_title is Latin “JudyTech”; RTL page dir was clipping the J with background-clip:text */}
         <motion.h1
+          dir="ltr"
           variants={itemVariants}
-          className="text-5xl font-black tracking-tight sm:text-7xl md:text-8xl"
+          className="hero-brand-heading w-full min-w-0 max-w-full text-center text-4xl font-black tracking-tight sm:text-6xl md:text-7xl lg:text-8xl"
         >
-          <GradientText className="text-5xl font-black tracking-tight sm:text-7xl md:text-8xl">
+          <GradientText className="hero-brand-gradient inline-block max-w-full text-4xl font-black tracking-tight sm:text-6xl md:text-7xl lg:text-8xl">
             {t("hero_title")}
           </GradientText>
         </motion.h1>

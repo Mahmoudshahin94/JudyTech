@@ -15,7 +15,7 @@ export default function GradientText({
 }: GradientTextProps) {
   return (
     <motion.span
-      className={`gradient-text ${className}`}
+      className={`gradient-text overflow-visible ${className}`}
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{

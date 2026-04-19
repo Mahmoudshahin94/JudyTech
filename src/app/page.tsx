@@ -12,7 +12,7 @@ import Footer from "@/components/Footer";
 export default function Home() {
   return (
     <LanguageProvider>
-      <div className="overflow-x-hidden w-full">
+      <div className="w-full min-w-0 max-w-full overflow-x-hidden">
         <CursorGlow />
         <Navbar />
         <main>

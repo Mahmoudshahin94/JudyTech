@@ -28,7 +28,7 @@ export default function Footer() {
         />
 
         <p className="text-sm text-slate-500">
-          &copy; 2026 JudyTech. {t("footer_rights")}
+          &copy; 2026 <span dir="ltr">JudyTech</span>. {t("footer_rights")}
         </p>
       </div>
     </motion.footer>
