@@ -96,8 +96,15 @@ body {
 
 .hero-brand-gradient {
   unicode-bidi: isolate;
-  direction: ltr;
   text-align: center;
+}
+
+.hero-brand-heading[dir="ltr"] .hero-brand-gradient {
+  direction: ltr;
+}
+
+.hero-brand-heading[dir="rtl"] .hero-brand-gradient {
+  direction: rtl;
 }
 
 .glass {

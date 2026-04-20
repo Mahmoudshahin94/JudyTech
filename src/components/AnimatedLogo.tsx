@@ -73,17 +73,16 @@ export default function AnimatedLogo({ variant }: AnimatedLogoProps) {
         variant === "navbar"
           ? { scale: navbarScale, opacity: navbarOpacity }
           : variant === "hero"
-          ? {
-              x: parallaxX,
-              y: parallaxY,
-              filter: "drop-shadow(0 0 20px rgba(99,102,241,0.3))",
-            }
-          : {
-              filter: "drop-shadow(0 0 12px rgba(99,102,241,0.2))",
-            }
+            ? {
+                x: parallaxX,
+                y: parallaxY,
+                filter: "drop-shadow(0 0 20px rgba(99,102,241,0.3))",
+              }
+            : {
+                filter: "drop-shadow(0 0 12px rgba(99,102,241,0.2))",
+              }
       }
     >
-      {/* Gradient glow behind logo (hero only) */}
       {variant === "hero" && (
         <motion.div
           className="absolute -z-10 rounded-full blur-3xl pointer-events-none"
@@ -103,21 +102,20 @@ export default function AnimatedLogo({ variant }: AnimatedLogoProps) {
         />
       )}
 
-      {/* Float wrapper */}
       <motion.div
         animate={
           variant === "hero"
             ? { y: [0, -12, 0] }
             : variant === "footer"
-            ? { y: [0, -4, 0] }
-            : {}
+              ? { y: [0, -4, 0] }
+              : {}
         }
         transition={
           variant === "hero"
             ? { duration: 4, repeat: Infinity, ease: "easeInOut" }
             : variant === "footer"
-            ? { duration: 5, repeat: Infinity, ease: "easeInOut" }
-            : {}
+              ? { duration: 5, repeat: Infinity, ease: "easeInOut" }
+              : {}
         }
       >
         <div className="relative">

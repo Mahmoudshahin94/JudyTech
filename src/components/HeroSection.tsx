@@ -51,7 +51,7 @@ export default function HeroSection() {
           <AnimatedLogo variant="hero" />
         </motion.div>
 
-        {/* dir=ltr: hero_title is Latin “JudyTech”; RTL page dir was clipping the J with background-clip:text */}
+        {/* Brand name stays Latin “JudyTech” in both languages */}
         <motion.h1
           dir="ltr"
           variants={itemVariants}

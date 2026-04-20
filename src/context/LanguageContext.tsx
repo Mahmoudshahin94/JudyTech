@@ -30,6 +30,9 @@ const translations = {
     contact_subtitle: "Ready to bring your ideas to life? Reach out to us.",
     contact_whatsapp: "Chat on WhatsApp",
     contact_email: "Send an Email",
+    contact_map_heading: "Our location",
+    contact_address: "Jerusalem — Palestine",
+    contact_open_maps: "Open in Google Maps",
     footer_rights: "All rights reserved.",
   },
   ar: {
@@ -56,6 +59,9 @@ const translations = {
     contact_subtitle: "مستعد لتحويل أفكارك إلى واقع؟ تواصل معنا.",
     contact_whatsapp: "تحدث عبر واتساب",
     contact_email: "أرسل بريداً إلكترونياً",
+    contact_map_heading: "موقعنا",
+    contact_address: "القدس — فلسطين",
+    contact_open_maps: "فتح في خرائط جوجل",
     footer_rights: "جميع الحقوق محفوظة.",
   },
 } as const;
