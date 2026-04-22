@@ -61,7 +61,7 @@ function buildEmailHtml(fields: {
     ["Last name", fields.lastName],
     ["Email", fields.email],
     ["Phone", fields.phone],
-    ["Title", fields.title],
+    ["Subject", fields.title],
     ["Description", fields.description || "—"],
   ] as const;
 

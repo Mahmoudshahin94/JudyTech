@@ -208,11 +208,11 @@ export default function ContactSection() {
               </div>
 
               <div className="mt-5">
-                <label htmlFor="contact-title" className={labelClass}>
-                  {t("contact_form_title")}
+                <label htmlFor="contact-subject" className={labelClass}>
+                  {t("contact_form_subject")}
                 </label>
                 <input
-                  id="contact-title"
+                  id="contact-subject"
                   name="title"
                   type="text"
                   required
@@ -261,7 +261,7 @@ export default function ContactSection() {
                   whileHover={status === "loading" ? undefined : { scale: 1.03 }}
                   whileTap={status === "loading" ? undefined : { scale: 0.98 }}
                 >
-                  {status === "loading" ? t("contact_form_sending") : t("contact_form_send")}
+                  {status === "loading" ? t("contact_form_submitting") : t("contact_form_submit")}
                 </motion.button>
               </div>
             </div>
