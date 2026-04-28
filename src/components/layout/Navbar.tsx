@@ -1,22 +1,22 @@
-"use client";
+'use client';
 
-import { useState } from "react";
+import { useState } from 'react';
 import {
   motion,
   useScroll,
   useTransform,
   useMotionTemplate,
   AnimatePresence,
-} from "framer-motion";
-import AnimatedLogo from "./AnimatedLogo";
-import LanguageToggle from "./LanguageToggle";
-import { useLanguage } from "@/context/LanguageContext";
+} from 'framer-motion';
+import AnimatedLogo from '@/components/AnimatedLogo';
+import LanguageToggle from '@/components/LanguageToggle';
+import { useLanguage } from '@/context/LanguageContext';
 
 const navLinks = [
-  { key: "nav_home", href: "#hero" },
-  { key: "nav_features", href: "#features" },
-  { key: "nav_showcase", href: "#showcase" },
-  { key: "nav_contact", href: "#contact" },
+  { key: 'nav_home', href: '#' },
+  { key: 'nav_features', href: '#features' },
+  { key: 'nav_showcase', href: '#showcase' },
+  { key: 'nav_contact', href: '#contact' },
 ] as const;
 
 export default function Navbar() {
@@ -24,9 +24,14 @@ export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const { scrollY } = useScroll();
 
-  const bgOpacity = useTransform(scrollY, [0, 100], [0, 0.9]);
-  const borderOpacity = useTransform(scrollY, [0, 100], [0, 0.08]);
-  const backdropBlur = useTransform(scrollY, [0, 100], [0, 24]);
+  const handleNavClick = (href: string) => {
+    if (href !== '#') return;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const bgOpacity = useTransform(scrollY, [0, 100], [0, 0.95]);
+  const borderOpacity = useTransform(scrollY, [0, 100], [0, 0.15]);
+  const backdropBlur = useTransform(scrollY, [0, 100], [0, 20]);
 
   const bgColor = useMotionTemplate`rgba(5, 5, 16, ${bgOpacity})`;
   const borderColor = useMotionTemplate`rgba(255, 255, 255, ${borderOpacity})`;
@@ -34,10 +39,10 @@ export default function Navbar() {
 
   return (
     <motion.nav
-      className="fixed top-0 left-0 right-0 z-40 px-6 py-4"
+      className="fixed top-0 left-0 right-0 z-40 px-4 md:px-6 py-4"
       style={{
         backgroundColor: bgColor,
-        borderBottom: `1px solid`,
+        borderBottom: '1px solid',
         borderBottomColor: borderColor,
         backdropFilter: blur,
         WebkitBackdropFilter: blur,
@@ -52,17 +57,18 @@ export default function Navbar() {
       >
         <AnimatedLogo variant="navbar" />
 
-        {/* Desktop links */}
-        <div className="hidden items-center gap-8 md:flex">
+        {/* Desktop Navigation */}
+        <div className="hidden items-center gap-12 md:flex">
           {navLinks.map((link, i) => (
             <motion.a
               key={link.key}
               href={link.href}
-              className="relative text-sm font-medium text-slate-300 transition-colors hover:text-white"
+              className="relative text-sm font-medium text-foreground/70 transition-colors hover:text-foreground"
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 * i + 0.3, duration: 0.5 }}
-              whileHover={{ y: -2 }}
+              whileHover={{ y: -2, color: '#f1f5f9' }}
+              onClick={() => handleNavClick(link.href)}
             >
               {t(link.key)}
               <motion.span
@@ -77,35 +83,35 @@ export default function Navbar() {
         <div className="flex items-center gap-4">
           <LanguageToggle />
 
-          {/* Mobile menu button */}
+          {/* Mobile Menu Button */}
           <motion.button
             className="flex flex-col gap-1.5 md:hidden cursor-pointer"
             onClick={() => setMobileOpen(!mobileOpen)}
             whileTap={{ scale: 0.9 }}
           >
             <motion.span
-              className="block h-0.5 w-6 bg-white rounded"
+              className="block h-0.5 w-6 bg-foreground rounded"
               animate={mobileOpen ? { rotate: 45, y: 8 } : { rotate: 0, y: 0 }}
             />
             <motion.span
-              className="block h-0.5 w-6 bg-white rounded"
+              className="block h-0.5 w-6 bg-foreground rounded"
               animate={mobileOpen ? { opacity: 0 } : { opacity: 1 }}
             />
             <motion.span
-              className="block h-0.5 w-6 bg-white rounded"
+              className="block h-0.5 w-6 bg-foreground rounded"
               animate={mobileOpen ? { rotate: -45, y: -8 } : { rotate: 0, y: 0 }}
             />
           </motion.button>
         </div>
       </div>
 
-      {/* Mobile menu */}
+      {/* Mobile Menu */}
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
-            className="glass-strong mt-4 rounded-2xl p-6 md:hidden"
+            className="glass-card-premium mt-4 rounded-2xl p-6 md:hidden"
             initial={{ opacity: 0, height: 0, scale: 0.95 }}
-            animate={{ opacity: 1, height: "auto", scale: 1 }}
+            animate={{ opacity: 1, height: 'auto', scale: 1 }}
             exit={{ opacity: 0, height: 0, scale: 0.95 }}
             transition={{ duration: 0.3 }}
           >
@@ -114,11 +120,14 @@ export default function Navbar() {
                 <motion.a
                   key={link.key}
                   href={link.href}
-                  className="text-base font-medium text-slate-300 hover:text-white"
+                  className="text-base font-medium text-foreground/70 hover:text-foreground transition-colors"
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.05 * i }}
-                  onClick={() => setMobileOpen(false)}
+                  onClick={() => {
+                    handleNavClick(link.href);
+                    setMobileOpen(false);
+                  }}
                 >
                   {t(link.key)}
                 </motion.a>

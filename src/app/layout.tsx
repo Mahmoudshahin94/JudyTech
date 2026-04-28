@@ -1,10 +1,13 @@
-import type { Metadata } from "next";
-import "./globals.css";
+import type { Metadata } from 'next';
+import './globals.css';
+import LenisProvider from '@/components/LenisProvider';
+import { CursorProvider } from '@/context/CursorContext';
 
 export const metadata: Metadata = {
-  title: "JudyTech — Digital Innovation",
+  title: 'JudyTech — Premium 3D Digital Experiences',
   description:
-    "We craft digital experiences that push the boundaries of technology and design. Web Development, AI Solutions, System Integration, and UI/UX Design.",
+    'Crafting premium 3D interfaces and immersive digital experiences with React Three Fiber, GSAP, and modern web technologies.',
+  viewport: 'width=device-width, initial-scale=1, maximum-scale=5',
 };
 
 export default function RootLayout({
@@ -13,8 +16,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" dir="ltr" className="h-full antialiased">
-      <body className="min-h-full bg-background text-foreground">{children}</body>
+    <html lang="en" dir="ltr" className="h-full antialiased smooth-scroll">
+      <body className="min-h-full bg-background text-foreground">
+        <CursorProvider>
+          <LenisProvider>{children}</LenisProvider>
+        </CursorProvider>
+      </body>
     </html>
   );
 }
