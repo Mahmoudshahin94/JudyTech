@@ -53,11 +53,11 @@ function SceneContent({ quality }: { quality: 'low' | 'high' }) {
 
       <fog attach="fog" args={['#050510', 8, 20]} />
 
-      {/* Lighting (dimmed) */}
-      <ambientLight intensity={0.25} />
+      {/* Lighting (scene dim, logo well-lit) */}
+      <ambientLight intensity={0.45} />
       <directionalLight
         position={[4, 6, 6]}
-        intensity={0.7}
+        intensity={0.9}
         castShadow={isHigh}
         shadow-mapSize-width={1024}
         shadow-mapSize-height={1024}
@@ -67,9 +67,11 @@ function SceneContent({ quality }: { quality: 'low' | 'high' }) {
         shadow-camera-top={6}
         shadow-camera-bottom={-6}
       />
-      <pointLight position={[-5, 3, 4]} intensity={0.32} color="#8b5cf6" />
-      <pointLight position={[5, -2, 5]} intensity={0.26} color="#06b6d4" />
-      <pointLight position={[0, 2, -6]} intensity={0.22} color="#7c3aed" />
+      {/* Front key light aimed at the logo so it pops */}
+      <pointLight position={[0, 0.5, 5]} intensity={1.6} color="#ffffff" distance={12} decay={1.5} />
+      {/* Two-tone scene accents: indigo + cyan only (no pink/purple) */}
+      <pointLight position={[-5, 3, 4]} intensity={0.5} color="#6366f1" />
+      <pointLight position={[5, -2, 5]} intensity={0.45} color="#06b6d4" />
 
       {/* HDRI for reflections (no background, lower intensity) — desktop only */}
       {isHigh && (
@@ -194,7 +196,7 @@ export default function Hero3D({
           className="absolute inset-0"
           style={{
             background:
-              'radial-gradient(ellipse at 50% 40%, rgba(99,102,241,0.18) 0%, rgba(139,92,246,0.10) 30%, transparent 65%)',
+              'radial-gradient(ellipse at 50% 40%, rgba(99,102,241,0.20) 0%, rgba(6,182,212,0.10) 35%, transparent 70%)',
           }}
         />
       </motion.div>
