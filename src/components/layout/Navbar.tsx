@@ -67,7 +67,11 @@ export default function Navbar() {
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 * i + 0.3, duration: 0.5 }}
-              whileHover={{ y: -2, color: '#f1f5f9' }}
+              whileHover={{
+                y: -2,
+                color: '#f1f5f9',
+                filter: 'drop-shadow(0 0 8px rgba(99,102,241,0.5))',
+              }}
               onClick={() => handleNavClick(link.href)}
             >
               {t(link.key)}

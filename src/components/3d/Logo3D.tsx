@@ -51,14 +51,31 @@ export default function Logo3D({ scale = 3.8, speed = 0.8 }: Logo3DProps) {
 
   const layerMaterial = useMemo(() => {
     const tex = processedTexture ?? logoTexture;
-    return new THREE.MeshStandardMaterial({
+    return new THREE.MeshPhysicalMaterial({
       map: tex,
       transparent: true,
       alphaTest: 0.1,
-      metalness: 0.55,
-      roughness: 0.3,
+      metalness: 0.85,
+      roughness: 0.18,
+      clearcoat: 0.9,
+      clearcoatRoughness: 0.15,
+      envMapIntensity: 1.2,
       emissive: new THREE.Color(0x3b82f6),
-      emissiveIntensity: 0.18,
+      emissiveIntensity: 0.22,
+      side: THREE.DoubleSide,
+    });
+  }, [logoTexture, processedTexture]);
+
+  const haloMaterial = useMemo(() => {
+    const tex = processedTexture ?? logoTexture;
+    return new THREE.MeshBasicMaterial({
+      map: tex,
+      transparent: true,
+      alphaTest: 0.1,
+      color: new THREE.Color(0x06b6d4),
+      blending: THREE.AdditiveBlending,
+      opacity: 0.35,
+      depthWrite: false,
       side: THREE.DoubleSide,
     });
   }, [logoTexture, processedTexture]);
@@ -67,14 +84,21 @@ export default function Logo3D({ scale = 3.8, speed = 0.8 }: Logo3DProps) {
     if (!groupRef.current) return;
 
     const targetY = groupRef.current.rotation.y + delta * 0.55 * speed;
-    const cursorTilt = mouse.x * 0.15;
+    const cursorTiltY = mouse.x * 0.18;
+    const cursorTiltX = -mouse.y * 0.12;
+
     groupRef.current.rotation.y = THREE.MathUtils.lerp(
       groupRef.current.rotation.y,
-      targetY + cursorTilt,
+      targetY + cursorTiltY,
+      0.08
+    );
+    groupRef.current.rotation.x = THREE.MathUtils.lerp(
+      groupRef.current.rotation.x,
+      cursorTiltX,
       0.08
     );
 
-    groupRef.current.position.y = 1.5 + Math.sin(state.clock.elapsedTime * 0.6) * 0.12;
+    groupRef.current.position.y = 0.2 + Math.sin(state.clock.elapsedTime * 0.6) * 0.18;
   });
 
   return (
@@ -93,6 +117,22 @@ export default function Logo3D({ scale = 3.8, speed = 0.8 }: Logo3DProps) {
           </mesh>
         );
       })}
+
+      {/* Neon rim halo (front + back) */}
+      <mesh
+        position={[0, 0, totalDepth / 2 + 0.02]}
+        scale={[1.015, 1.015, 1]}
+        material={haloMaterial}
+      >
+        <planeGeometry args={[4.4, 3.2]} />
+      </mesh>
+      <mesh
+        position={[0, 0, -totalDepth / 2 - 0.02]}
+        scale={[1.015, 1.015, 1]}
+        material={haloMaterial}
+      >
+        <planeGeometry args={[4.4, 3.2]} />
+      </mesh>
     </group>
   );
 }

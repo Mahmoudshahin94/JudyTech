@@ -1,10 +1,17 @@
 'use client';
 
 import { Suspense } from 'react';
+import dynamic from 'next/dynamic';
 import { LanguageProvider, useLanguage } from '@/context/LanguageContext';
 import Navbar from '@/components/layout/Navbar';
-import Hero3D from '@/components/3d/Hero3D';
 import FeaturesSection from '@/components/layout/FeaturesSection';
+
+const Hero3D = dynamic(() => import('@/components/3d/Hero3D'), {
+  ssr: false,
+  loading: () => (
+    <div className="w-full h-screen bg-gradient-to-b from-background via-primary/5 to-background animate-pulse" />
+  ),
+});
 import ShowcaseSection from '@/components/layout/ShowcaseSection';
 import ContactSection from '@/components/ContactSection';
 import Footer from '@/components/layout/Footer';
