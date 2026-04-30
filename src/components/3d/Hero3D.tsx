@@ -53,11 +53,11 @@ function SceneContent({ quality }: { quality: 'low' | 'high' }) {
 
       <fog attach="fog" args={['#050510', 8, 20]} />
 
-      {/* Lighting */}
-      <ambientLight intensity={0.45} />
+      {/* Lighting (dimmed) */}
+      <ambientLight intensity={0.25} />
       <directionalLight
         position={[4, 6, 6]}
-        intensity={1.1}
+        intensity={0.7}
         castShadow={isHigh}
         shadow-mapSize-width={1024}
         shadow-mapSize-height={1024}
@@ -67,12 +67,14 @@ function SceneContent({ quality }: { quality: 'low' | 'high' }) {
         shadow-camera-top={6}
         shadow-camera-bottom={-6}
       />
-      <pointLight position={[-5, 3, 4]} intensity={0.55} color="#8b5cf6" />
-      <pointLight position={[5, -2, 5]} intensity={0.45} color="#06b6d4" />
-      <pointLight position={[0, 2, -6]} intensity={0.4} color="#7c3aed" />
+      <pointLight position={[-5, 3, 4]} intensity={0.32} color="#8b5cf6" />
+      <pointLight position={[5, -2, 5]} intensity={0.26} color="#06b6d4" />
+      <pointLight position={[0, 2, -6]} intensity={0.22} color="#7c3aed" />
 
-      {/* HDRI for reflections (no background) */}
-      <Environment preset="city" background={false} />
+      {/* HDRI for reflections (no background, lower intensity) — desktop only */}
+      {isHigh && (
+        <Environment preset="city" background={false} environmentIntensity={0.55} />
+      )}
 
       {/* 3D Logo (focal point) */}
       <Logo3D scale={1.5} speed={0.8} />
@@ -80,23 +82,25 @@ function SceneContent({ quality }: { quality: 'low' | 'high' }) {
       {/* Glass orbiter — high quality only */}
       {isHigh && <HeroOrbiter position={[2.2, 0.6, -1.4]} />}
 
-      {/* Soft contact shadow */}
+      {/* Very transparent contact shadow */}
       <ContactShadows
         position={[0, -2.2, 0]}
-        opacity={0.55}
-        blur={2.6}
+        opacity={0.28}
+        blur={3.2}
         far={4}
         scale={12}
         resolution={isHigh ? 512 : 256}
+        frames={isHigh ? Infinity : 1}
       />
 
-      {/* Layered particle field */}
+      {/* Layered particle field — shader on desktop only, simple points on mobile/iOS Safari */}
       <ParticleField
-        count={isHigh ? 500 : 220}
+        count={isHigh ? 500 : 180}
         color="#6366f1"
-        size={5}
+        size={isHigh ? 5 : 4}
         depth="far"
         spread={14}
+        shader={isHigh}
       />
       {isHigh && (
         <ParticleField
@@ -111,8 +115,8 @@ function SceneContent({ quality }: { quality: 'low' | 'high' }) {
       {/* Mouse parallax */}
       <MouseParallaxRig />
 
-      {/* Post Processing */}
-      <Effects enableBloom bloomIntensity={1.2} quality={quality} />
+      {/* Post Processing — gentler bloom, off on mobile/iOS for safety */}
+      {isHigh && <Effects enableBloom bloomIntensity={0.7} quality={quality} />}
     </>
   );
 }
@@ -177,7 +181,8 @@ export default function Hero3D({
 
   return (
     <div
-      className="relative w-full h-screen overflow-hidden bg-background"
+      className="relative w-full overflow-hidden bg-background"
+      style={{ height: '100vh', minHeight: '100svh' }}
       onMouseMove={handleMouseMove}
     >
       {/* Layered CSS depth backgrounds */}
@@ -195,17 +200,13 @@ export default function Hero3D({
       </motion.div>
 
       <motion.div
-        className="absolute inset-0 z-[1] pointer-events-none opacity-[0.07]"
+        className="absolute inset-0 z-[1] pointer-events-none opacity-[0.05]"
         style={{
           x: midX,
           y: midY,
           backgroundImage:
-            "linear-gradient(rgba(255,255,255,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.5) 1px, transparent 1px)",
-          backgroundSize: '60px 60px',
-          maskImage:
-            'radial-gradient(ellipse at center, black 30%, transparent 75%)',
-          WebkitMaskImage:
-            'radial-gradient(ellipse at center, black 30%, transparent 75%)',
+            'linear-gradient(rgba(255,255,255,0.4) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.4) 1px, transparent 1px), radial-gradient(ellipse at center, transparent 30%, #050510 80%)',
+          backgroundSize: '60px 60px, 60px 60px, 100% 100%',
         }}
       />
 
@@ -213,7 +214,13 @@ export default function Hero3D({
       <div className="absolute inset-0 z-[2]">
         <Canvas
           shadows={quality === 'high'}
-          gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }}
+          gl={{
+            antialias: true,
+            alpha: true,
+            powerPreference: 'default',
+            failIfMajorPerformanceCaveat: false,
+            preserveDrawingBuffer: false,
+          }}
           dpr={[1, quality === 'high' ? 2 : 1.5]}
         >
           <Suspense fallback={null}>
@@ -222,7 +229,7 @@ export default function Hero3D({
         </Canvas>
       </div>
 
-      {/* Volumetric fog vignette */}
+      {/* Volumetric fog vignette (no backdrop-filter masks — Safari iOS friendly) */}
       <motion.div
         className="absolute inset-0 z-[3] pointer-events-none"
         style={{ x: nearX, y: nearY }}
@@ -234,23 +241,18 @@ export default function Hero3D({
               'radial-gradient(ellipse at center, transparent 40%, rgba(5,5,16,0.55) 90%)',
           }}
         />
-        {/* Top + bottom DOF blur edges */}
         <div
           className="absolute top-0 left-0 right-0 h-24"
           style={{
-            backdropFilter: 'blur(8px)',
-            WebkitBackdropFilter: 'blur(8px)',
-            maskImage: 'linear-gradient(to bottom, black, transparent)',
-            WebkitMaskImage: 'linear-gradient(to bottom, black, transparent)',
+            background:
+              'linear-gradient(to bottom, rgba(5,5,16,0.7), transparent)',
           }}
         />
         <div
           className="absolute bottom-0 left-0 right-0 h-32"
           style={{
-            backdropFilter: 'blur(10px)',
-            WebkitBackdropFilter: 'blur(10px)',
-            maskImage: 'linear-gradient(to top, black, transparent)',
-            WebkitMaskImage: 'linear-gradient(to top, black, transparent)',
+            background:
+              'linear-gradient(to top, rgba(5,5,16,0.85), transparent)',
           }}
         />
       </motion.div>

@@ -55,13 +55,13 @@ export default function Logo3D({ scale = 3.8, speed = 0.8 }: Logo3DProps) {
       map: tex,
       transparent: true,
       alphaTest: 0.1,
-      metalness: 0.85,
-      roughness: 0.18,
-      clearcoat: 0.9,
-      clearcoatRoughness: 0.15,
-      envMapIntensity: 1.2,
+      metalness: 0.7,
+      roughness: 0.28,
+      clearcoat: 0.7,
+      clearcoatRoughness: 0.2,
+      envMapIntensity: 0.7,
       emissive: new THREE.Color(0x3b82f6),
-      emissiveIntensity: 0.22,
+      emissiveIntensity: 0.1,
       side: THREE.DoubleSide,
     });
   }, [logoTexture, processedTexture]);
@@ -74,7 +74,7 @@ export default function Logo3D({ scale = 3.8, speed = 0.8 }: Logo3DProps) {
       alphaTest: 0.1,
       color: new THREE.Color(0x06b6d4),
       blending: THREE.AdditiveBlending,
-      opacity: 0.35,
+      opacity: 0.18,
       depthWrite: false,
       side: THREE.DoubleSide,
     });
