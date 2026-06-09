@@ -133,6 +133,59 @@ body {
   box-decoration-break: clone;
 }
 
+/* Display typography tier — large editorial headlines */
+.text-display {
+  font-size: clamp(2.75rem, 6vw + 1rem, 7rem);
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  line-height: 0.95;
+}
+
+.text-display-sm {
+  font-size: clamp(2.25rem, 4vw + 0.5rem, 4.5rem);
+  font-weight: 700;
+  letter-spacing: -0.035em;
+  line-height: 1.02;
+}
+
+[dir="rtl"] .text-display,
+[dir="rtl"] .text-display-sm {
+  letter-spacing: 0;
+  line-height: 1.15;
+}
+
+/* Small uppercase section label */
+.text-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: rgba(241, 245, 249, 0.55);
+}
+
+[dir="rtl"] .text-eyebrow {
+  letter-spacing: 0.12em;
+}
+
+.text-eyebrow::before {
+  content: "";
+  display: inline-block;
+  width: 1.5rem;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--color-primary), var(--color-accent));
+}
+
+/* Subtle one-word gradient highlight inside otherwise solid headings */
+.accent-word {
+  background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
 /* RTL + iOS: gradient clipped text and Arabic metrics need a bit more room */
 [dir="rtl"] .gradient-text {
   line-height: 1.35;

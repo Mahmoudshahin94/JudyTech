@@ -1,82 +1,88 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import AnimatedSection from '@/components/ui/AnimatedSection';
 import AnimatedButton from '@/components/ui/AnimatedButton';
-import Badge from '@/components/ui/Badge';
+import Eyebrow from '@/components/ui/Eyebrow';
 import { useLanguage } from '@/context/LanguageContext';
-import { animationPresets } from '@/utils/animations';
 
 export default function CTASection() {
-  const { t } = useLanguage();
+  const { t, dir } = useLanguage();
 
-  const containerVariants = animationPresets.containerVariants;
-  const itemVariants = animationPresets.itemVariants;
+  const handleClick = () => {
+    const target = document.getElementById('contact');
+    target?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
 
   return (
-    <section className="relative py-24 px-4 bg-background overflow-hidden">
-      {/* Premium gradient background */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute inset-0 bg-gradient-to-r from-primary/20 via-transparent to-secondary/20 opacity-30" />
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-primary/10 rounded-full blur-3xl" />
+    <section
+      id="cta"
+      className="relative overflow-hidden bg-background px-4 py-28 md:py-36"
+    >
+      <div className="pointer-events-none absolute inset-0">
+        <div className="absolute left-1/2 top-1/2 h-[640px] w-[860px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-gradient-to-r from-primary/15 via-secondary/10 to-accent/15 blur-[120px]" />
+        <div
+          className="absolute inset-0 opacity-[0.04]"
+          style={{
+            backgroundImage:
+              'linear-gradient(rgba(255,255,255,0.6) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.6) 1px, transparent 1px)',
+            backgroundSize: '64px 64px',
+            maskImage: 'radial-gradient(ellipse at center, black 30%, transparent 75%)',
+            WebkitMaskImage: 'radial-gradient(ellipse at center, black 30%, transparent 75%)',
+          }}
+        />
       </div>
 
-      <div className="relative z-10 max-w-4xl mx-auto">
-        <AnimatedSection animation="scale-up" useGSAP={false}>
-          <motion.div
-            className="glass-card-premium rounded-2xl p-12 md:p-16 text-center"
-            variants={containerVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
+      <div
+        className="relative z-10 mx-auto flex max-w-4xl flex-col items-center text-center"
+        style={{ direction: dir }}
+      >
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-80px' }}
+          transition={{ duration: 0.5 }}
+        >
+          <Eyebrow label={t('cta_eyebrow')} className="mb-6" />
+        </motion.div>
+
+        <motion.h2
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-80px' }}
+          transition={{ duration: 0.8, ease: [0.25, 0.4, 0.25, 1] }}
+          className="text-display max-w-3xl"
+        >
+          <span className="gradient-text">{t('cta_title')}</span>
+        </motion.h2>
+
+        <motion.p
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-80px' }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="mt-8 max-w-2xl text-balance text-lg leading-relaxed text-foreground/65 md:text-xl"
+        >
+          {t('cta_subtitle')}
+        </motion.p>
+
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-80px' }}
+          transition={{ duration: 0.6, delay: 0.35 }}
+          className="mt-10"
+        >
+          <AnimatedButton
+            variant="primary"
+            size="lg"
+            shimmer
+            glass3d
+            className="px-10"
+            onClick={handleClick}
           >
-            {/* Badge */}
-            <motion.div variants={itemVariants} className="mb-6">
-              <Badge label="🚀 Ready?" variant="primary" className="mx-auto" />
-            </motion.div>
-
-            {/* Title */}
-            <motion.h2
-              variants={itemVariants}
-              className="text-5xl md:text-6xl font-bold mb-6"
-            >
-              <span className="bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">
-                {t('cta_title')}
-              </span>
-            </motion.h2>
-
-            {/* Subtitle */}
-            <motion.p
-              variants={itemVariants}
-              className="text-lg md:text-xl text-foreground/70 mb-10 max-w-2xl mx-auto"
-            >
-              {t('cta_subtitle')}
-            </motion.p>
-
-            {/* CTA Button */}
-            <motion.div
-              variants={itemVariants}
-              className="flex flex-col sm:flex-row gap-4 justify-center"
-            >
-              <AnimatedButton
-                variant="primary"
-                size="lg"
-                shimmer
-                className="px-10"
-              >
-                {t('cta_button')}
-              </AnimatedButton>
-            </motion.div>
-
-            {/* Trust Badge */}
-            <motion.p
-              variants={itemVariants}
-              className="mt-10 text-sm text-foreground/50"
-            >
-              ✓ Trusted by leading brands worldwide
-            </motion.p>
-          </motion.div>
-        </AnimatedSection>
+            {t('cta_button')}
+          </AnimatedButton>
+        </motion.div>
       </div>
     </section>
   );
