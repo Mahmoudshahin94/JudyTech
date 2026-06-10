@@ -13,7 +13,6 @@ import { ScrollToPlugin } from 'gsap/ScrollToPlugin';
 import * as THREE from 'three';
 import Logo3D from './Logo3D';
 import ParticleField from './ParticleField';
-import HeroOrbiter from './HeroOrbiter';
 import Effects from './EffectsComposer';
 import { useQuality } from './useQuality';
 import AnimatedButton from '@/components/ui/AnimatedButton';
@@ -31,13 +30,13 @@ interface Hero3DProps {
 
 function MouseParallaxRig() {
   const { camera, mouse } = useThree();
-  const target = useRef(new THREE.Vector3(0, 0, 8));
+  const target = useRef(new THREE.Vector3(0, 0, 7));
 
   useFrame(() => {
-    target.current.x = mouse.x * 0.6;
-    target.current.y = mouse.y * 0.4;
-    camera.position.x += (target.current.x - camera.position.x) * 0.05;
-    camera.position.y += (target.current.y - camera.position.y) * 0.05;
+    target.current.x = mouse.x * 0.25;
+    target.current.y = mouse.y * 0.15;
+    camera.position.x += (target.current.x - camera.position.x) * 0.03;
+    camera.position.y += (target.current.y - camera.position.y) * 0.03;
     camera.lookAt(0, 0, 0);
   });
 
@@ -49,76 +48,61 @@ function SceneContent({ quality }: { quality: 'low' | 'high' }) {
 
   return (
     <>
-      <PerspectiveCamera makeDefault position={[0, 0, 8]} fov={75} />
+      <PerspectiveCamera makeDefault position={[0, 0, 7]} fov={45} />
 
-      <fog attach="fog" args={['#050510', 8, 20]} />
+      <fog attach="fog" args={['#050510', 10, 22]} />
 
-      {/* Lighting (scene dim, logo well-lit) */}
-      <ambientLight intensity={0.45} />
+      {/* Minimal, considered lighting */}
+      <ambientLight intensity={0.4} />
+
+      {/* Single soft key light from upper-front */}
       <directionalLight
-        position={[4, 6, 6]}
-        intensity={0.9}
-        castShadow={isHigh}
-        shadow-mapSize-width={1024}
-        shadow-mapSize-height={1024}
-        shadow-camera-far={20}
-        shadow-camera-left={-6}
-        shadow-camera-right={6}
-        shadow-camera-top={6}
-        shadow-camera-bottom={-6}
+        position={[1.5, 3, 4]}
+        intensity={1.1}
+        color="#ffffff"
       />
-      {/* Front key light aimed at the logo so it pops */}
-      <pointLight position={[0, 0.5, 5]} intensity={1.6} color="#ffffff" distance={12} decay={1.5} />
-      {/* Two-tone scene accents: indigo + cyan only (no pink/purple) */}
-      <pointLight position={[-5, 3, 4]} intensity={0.5} color="#6366f1" />
-      <pointLight position={[5, -2, 5]} intensity={0.45} color="#06b6d4" />
 
-      {/* HDRI for reflections (no background, lower intensity) — desktop only */}
+      {/* Subtle cool rim from behind, single accent */}
+      <pointLight
+        position={[0, 0, -3]}
+        intensity={0.8}
+        color="#06b6d4"
+        distance={8}
+        decay={2}
+      />
+
+      {/* HDRI for material reflections */}
       {isHigh && (
-        <Environment preset="city" background={false} environmentIntensity={0.55} />
+        <Environment preset="warehouse" background={false} environmentIntensity={0.4} />
       )}
 
-      {/* 3D Logo (focal point) */}
-      <Logo3D scale={1.5} speed={0.8} />
+      {/* The logo — head-on, centered, the only focus */}
+      <Logo3D scale={2.4} />
 
-      {/* Glass orbiter — high quality only */}
-      {isHigh && <HeroOrbiter position={[2.2, 0.6, -1.4]} />}
-
-      {/* Very transparent contact shadow */}
+      {/* Soft contact shadow — gentle grounding */}
       <ContactShadows
-        position={[0, -2.2, 0]}
-        opacity={0.28}
-        blur={3.2}
+        position={[0, -2.0, 0]}
+        opacity={0.4}
+        blur={4}
         far={4}
-        scale={12}
+        scale={10}
         resolution={isHigh ? 512 : 256}
         frames={isHigh ? Infinity : 1}
       />
 
-      {/* Layered particle field — shader on desktop only, simple points on mobile/iOS Safari */}
+      {/* Background depth particles — subtle, distant only */}
       <ParticleField
-        count={isHigh ? 500 : 180}
+        count={isHigh ? 200 : 100}
         color="#6366f1"
-        size={isHigh ? 5 : 4}
+        size={isHigh ? 3 : 2.5}
         depth="far"
-        spread={14}
+        spread={18}
         shader={isHigh}
       />
-      {isHigh && (
-        <ParticleField
-          count={180}
-          color="#22d3ee"
-          size={9}
-          depth="mid"
-          spread={9}
-        />
-      )}
 
-      {/* Mouse parallax */}
       <MouseParallaxRig />
 
-      {/* Post Processing — gentler bloom, off on mobile/iOS for safety */}
-      {isHigh && <Effects enableBloom bloomIntensity={0.7} quality={quality} />}
+      {isHigh && <Effects enableBloom bloomIntensity={0.5} quality={quality} />}
     </>
   );
 }
@@ -196,7 +180,7 @@ export default function Hero3D({
           className="absolute inset-0"
           style={{
             background:
-              'radial-gradient(ellipse at 50% 40%, rgba(99,102,241,0.20) 0%, rgba(6,182,212,0.10) 35%, transparent 70%)',
+              'radial-gradient(ellipse 50% 50% at 50% 50%, rgba(6,182,212,0.12) 0%, rgba(99,102,241,0.08) 40%, transparent 75%)',
           }}
         />
       </motion.div>
@@ -240,7 +224,7 @@ export default function Hero3D({
           className="absolute inset-0"
           style={{
             background:
-              'radial-gradient(ellipse at center, transparent 40%, rgba(5,5,16,0.55) 90%)',
+              'radial-gradient(ellipse at center, transparent 55%, rgba(5,5,16,0.4) 100%)',
           }}
         />
         <div

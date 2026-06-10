@@ -1,43 +1,12 @@
 'use client';
 
-import { Suspense } from 'react';
-import { Canvas } from '@react-three/fiber';
-import { PerspectiveCamera } from '@react-three/drei';
 import { motion } from 'framer-motion';
-import Logo3D from '@/components/3d/Logo3D';
-import { useQuality } from '@/components/3d/useQuality';
 import AnimatedButton from '@/components/ui/AnimatedButton';
 import { useLanguage } from '@/context/LanguageContext';
 
 function scrollToId(id: string) {
   const el = document.getElementById(id);
   el?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-}
-
-function HeroCanvas() {
-  const quality = useQuality();
-  const isHigh = quality === 'high';
-
-  return (
-    <Canvas
-      gl={{
-        antialias: true,
-        alpha: true,
-        powerPreference: 'default',
-        failIfMajorPerformanceCaveat: false,
-      }}
-      dpr={[1, isHigh ? 2 : 1.5]}
-    >
-      <Suspense fallback={null}>
-        <PerspectiveCamera makeDefault position={[0, 0, 7]} fov={50} />
-        <ambientLight intensity={0.55} />
-        <pointLight position={[0, 0.5, 5]} intensity={1.6} color="#ffffff" distance={12} decay={1.5} />
-        <pointLight position={[-4, 3, 3]} intensity={0.5} color="#6366f1" />
-        <pointLight position={[4, -2, 4]} intensity={0.45} color="#06b6d4" />
-        <Logo3D scale={1.15} speed={0.55} />
-      </Suspense>
-    </Canvas>
-  );
 }
 
 export default function HeroSection() {
@@ -75,25 +44,12 @@ export default function HeroSection() {
         className="relative z-10 mx-auto flex max-w-5xl flex-col items-center px-4 text-center"
         style={{ direction: dir }}
       >
-        {/* Floating 3D logo mark */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.85 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.9, ease: 'easeOut' }}
-          className="relative mb-8 h-40 w-40 sm:h-48 sm:w-48 md:h-56 md:w-56"
-        >
-          <div className="absolute inset-4 rounded-full bg-gradient-to-tr from-primary/30 via-secondary/20 to-accent/30 blur-3xl" />
-          <div className="relative h-full w-full">
-            <HeroCanvas />
-          </div>
-        </motion.div>
-
         {/* Eyebrow */}
         <motion.span
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.1 }}
-          className="text-eyebrow mb-6"
+          className="text-eyebrow mb-8"
         >
           {t('hero_badge')}
         </motion.span>

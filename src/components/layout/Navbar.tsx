@@ -8,7 +8,7 @@ import {
   useMotionTemplate,
   AnimatePresence,
 } from 'framer-motion';
-import AnimatedLogo from '@/components/AnimatedLogo';
+import LogoMark3D from '@/components/3d/LogoMark3D';
 import LanguageToggle from '@/components/LanguageToggle';
 import { useLanguage } from '@/context/LanguageContext';
 
@@ -64,7 +64,10 @@ export default function Navbar() {
         className="mx-auto flex max-w-7xl items-center justify-between gap-6"
         style={{ direction: dir }}
       >
-        <AnimatedLogo variant="navbar" />
+        <LogoMark3D
+          ariaLabel="JudyTech home"
+          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+        />
 
         {/* Desktop links */}
         <div className="hidden items-center gap-10 md:flex">
